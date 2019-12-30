@@ -8,6 +8,12 @@ A statement of the problem you are solving and/or a high level description of th
 A chatting app between two users, mimicking Messenger. Names of the users and chatrooms are customizable.
 
 A description as to how the project will be used (describe the user interface):
+- One user will create a chat and be the host. Other users are able to find the chat and join.
+- Once a user has joined a chat, they are able to see the previously sent messages in reverse-chronological order (oldest messages at the top, the most recent messages are just above the prompt line).
+- Each time a message is sent, it will display the name of the user who sent the message, followed by the message itself/
+  - Ex) ilovedogs123: hello world
+- Users are only able to send messages containing characters (cannot send photos or videos)
+
 
 
 A description of your technical design. This should include:
@@ -19,18 +25,24 @@ How you will be using the topics covered in class in the project:
 
 How you are breaking down the project and who is responsible for which parts:
 - Making basic shell of chatroom:
+- Priority Queue:
 - Customizing the chatroom:
 - Networking:
--
 
-What data structures you will be using and how:
+What algorithms and /or data structures you will be using, and how:
 - Array to hold customizable aspects of the chatroom:
   * Original names set by users
   * Nicknames
   * Chatroom name
+- Priority Queue to store the content of a message and the date the message was sent
+  * Allows for insertion and deletion in O(1) time
 
-
-What algorithms and /or data structures you will be using, and how:
 
 
 A timeline with expected completion dates of parts of the project:
+- 1/4: User inputs message, program is able to store the message
+- 1/7: Use priority queues to store messages in order by date
+- 1/8: User can customize nicknames
+- 1/11: Figure out networking
+- 1/13: User can create multiple chatrooms and navigate between them
+- 1/15: Hopefully done, have two days to test and make sure everything works
