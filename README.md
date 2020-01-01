@@ -24,10 +24,10 @@ How you will be using the topics covered in class in the project:
 - Pipes
 
 How you are breaking down the project and who is responsible for which parts:
-- Making basic shell of chatroom:
-- Priority Queue:
-- Customizing the chatroom:
-- Networking:
+- Making basic shell of chatroom: Hana
+- Priority Queue: Christy
+- Customizing the chatroom: Hana
+- Networking: Christy
 
 What algorithms and /or data structures you will be using, and how:
 - Array to hold customizable aspects of the chatroom:
