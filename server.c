@@ -9,14 +9,16 @@
 int main(){
 
   Node* pq = newNode("m1", 1);
-    push(&pq, "m2", 2);
-    push(&pq, "m3", 3);
-    push(&pq, "m4", 0);
+  push(&pq, "m2", 2);
+  push(&pq, "m3", 3);
+  push(&pq, "m4", 0);
 
-    while (!isEmpty(&pq)) {
-      printf("%s \n", peek(&pq));
-      pop(&pq);
-    }
+  while (!isEmpty(&pq)) {
+    printf("%s \n", peek(&pq));
+    pop(&pq);
+  }
+
+  //will output m4 m1 m2 m3
 
 
   // char name[256];
