@@ -46,3 +46,7 @@ A timeline with expected completion dates of parts of the project:
 - 1/11: Figure out networking
 - 1/13: User can create multiple chatrooms and navigate between them
 - 1/15: Hopefully done, have two days to test and make sure everything works
+
+DEVLOG
+- 1/5: Christy
+  * Started working on project. Created necessary files. Create priority queue structure. Right now, the chatroom asks for your name and a message. Need to store the message in memory and implement the priority queue structure
