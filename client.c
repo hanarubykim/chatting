@@ -5,8 +5,16 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+void nickname(){
+
+}
 
 int main(){
 
+  while(1){
 
+
+  }
+
+return 0;
 }
