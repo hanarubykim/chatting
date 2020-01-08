@@ -4,7 +4,7 @@
 
 typedef struct node {
   char* data;
-  int priority;//lower values indicate higher priority
+  int priority; //lower values indicate higher priority
   struct node* next;
 
 } Node;
