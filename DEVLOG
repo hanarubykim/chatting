@@ -8,5 +8,11 @@ DEVLOG
 - 1/7: Christy
   * Continued experimenting with networking code
 
+- 1/7: Hana
+  * Began working on proper output of chat lines.
+
+- 1/8: Hana
+  * Fixed display of chatroom. Storing chat lines. Displaying all messages.
+
 - 1/8: Christy
   * Cleared the terminal to make it look like chat room

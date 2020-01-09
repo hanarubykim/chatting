@@ -72,17 +72,21 @@ int main(){
     chatLine = strcat(name, timey);
     chatLine = strcat(chatLine, message);
 
-    printf("\e[1;1H\e[2J");
-
-    printf("%s ", chatLine);
-
     //Node contains string "Hana Kim (12:02:35): hello world"
     addMessage(msg, message);
 
+    printf("\e[1;1H\e[2J");
+    printf("**************************\n");
+    printf("WELCOME TO CHAT ROOM\n");
+    printf("**************************\n");
 
+    //Print out all the messages
+    Node * tempCopy = copy(msg);
+    while(!isEmpty(tempCopy)){
+      printf("%s", tempCopy->data);
+      pop(tempCopy);
+    }
     printf("%c[2K", 27);
-
-
   }
 
 

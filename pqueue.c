@@ -34,8 +34,6 @@ void push(Node** head, char* d){
 
   //create new node
   Node* temp = newNode(d);
-
-  //insert node with higher priority. Insert new node before head node and change head node
   temp->next = *head;
   (*head) = temp;
 
@@ -47,4 +45,20 @@ void push(Node** head, char* d){
 //function to check is list is empty
 int isEmpty(Node** head){
   return (*head) == NULL;
+}
+
+Node * copy(Node ** head){
+  Node * newHead = (*head);
+  head = head->next;
+  Node * start = malloc(sizeof(Node));
+  start = newHead;
+
+  while(!isEmpty(*head)){
+    newHead->next = malloc(sizeof(Node));
+    newHead = newHead->next;
+    strcpy(newHead->data, head->data);
+    head = head->next;
+  }
+  newHead->next = NULL;
+  return start;
 }
