@@ -7,6 +7,8 @@
 #include "pqueue.c"
 #include <time.h>
 
+Node * msg;
+
 char * timeStamp(){
   time(NULL);
   time_t now;
@@ -21,17 +23,11 @@ char * timeStamp(){
   return timey;
 }
 
-// void addMessage(Node ** pq, char * message){
-//   push(pq, message);
-// }
-
-void addMessage(Node **pq, char * message){
-  printf("THIS WORKS");
+void addMessage(Node ** pq, char * message){
   push(pq, message);
 }
 
 int main(){
-  //Node ** msg = malloc(sizeof(Node));
   //TESTING CODE FOR PRIORITY QUEUE
   //each node is data
 
@@ -63,7 +59,7 @@ int main(){
   printf("You can now enter messages!\n");
 
   while(1){
-    Node ** msg = malloc(sizeof(Node));
+    Node* msg = newNode("HEAD NODE"); //the head node.
     char message[256];
     fgets(message, 256, stdin);
     message[strlen(message) - 1] = '\n';
@@ -78,7 +74,6 @@ int main(){
 
     //Node contains string "Hana Kim (12:02:35): hello world"
     addMessage(msg, message);
-    printf("THIS HERE SHOULD HAVE HAPPENED");
 
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
@@ -86,15 +81,12 @@ int main(){
     printf("**************************\n");
 
     //Print out all the messages
-    Node ** tempCopy = malloc(sizeof(Node));
-    tempCopy = copy(msg);
-    printf("HEAD: %s", print(*msg));
-    //printf("%s", tempCopy->data);
-    // while(!isEmpty(tempCopy)){
-    //   printf("%s", (*tempCopy)->data);
-    //   pop(tempCopy);
-    // }
-    //printf("%c[2K", 27);
+    Node ** tempCopy = copy(msg);
+    while(!isEmpty(&tempCopy)){
+      printf("%s", tempCopy->data);
+      pop(tempCopy);
+    }
+    printf("%c[2K", 27);
   }
 
 
