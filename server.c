@@ -6,8 +6,6 @@
 #include <unistd.h>
 #include "pqueue.c"
 #include <time.h>
-#include <curses.h>
-#include <sys/ioctl.h>
 
 Node* msg;
 
@@ -30,9 +28,6 @@ void addMessage(Node* pq, char * message){
 }
 
 int main(){
-
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   //TESTING CODE FOR PRIORITY QUEUE
   //each node is data
 
