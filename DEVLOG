@@ -1,0 +1,12 @@
+DEVLOG
+- 1/5: Christy
+  * Started working on project. Created necessary files. Create priority queue structure. Right now, the chatroom asks for your name and a message. Need to store the message in memory and implement the priority queue structure
+
+- 1/6: Christy
+  * Looked into networking code posted on dwsource
+
+- 1/7: Christy
+  * Continued experimenting with networking code
+
+- 1/8: Christy
+  * Cleared the terminal to make it look like chat room
