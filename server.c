@@ -6,8 +6,10 @@
 #include <unistd.h>
 #include "pqueue.c"
 #include <time.h>
+#include <curses.h>
+#include <sys/ioctl.h>
 
-Node * msg;
+Node* msg;
 
 char * timeStamp(){
   time(NULL);
@@ -23,24 +25,26 @@ char * timeStamp(){
   return timey;
 }
 
-void addMessage(char * message){
-  int currentNode = 1;
-  push(&msg, message);
+void addMessage(Node* pq, char * message){
+  push(&pq, message);
 }
 
 int main(){
+
+  struct winsize w;
+  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   //TESTING CODE FOR PRIORITY QUEUE
   //each node is data
 
-  Node* pq = newNode("m1");
-  push(&pq, "m2");
-  push(&pq, "m3");
-  push(&pq, "m4");
-  //will output m4 m3 m2 m1
-  while (!isEmpty(&pq)) {
-    printf("%s \n", peek(&pq));
-    pop(&pq);
-  }
+  // Node* pq = newNode("m1");
+  // push(&pq, "m2");
+  // push(&pq, "m3");
+  // push(&pq, "m4");
+  // //will output m4 m3 m2 m1
+  // while (!isEmpty(&pq)) {
+  //   printf("%s \n", peek(&pq));
+  //   pop(&pq);
+  // }
 
   //******************************************************************************
   //ACTUAL CODE OF THE CHAT ROOM
@@ -60,22 +64,30 @@ int main(){
   printf("You can now enter messages!\n");
 
   while(1){
-  char message[256];
-  fgets(message, 256, stdin);
-  message[strlen(message) - 1] = '\n';
-  message[strlen(message)] = '\0';
+    Node* msg = newNode("HEAD NODE"); //the head node.
+    char message[256];
+    fgets(message, 256, stdin);
+    message[strlen(message) - 1] = '\n';
+    message[strlen(message)] = '\0';
 
-  char * timey = timeStamp();
+    char * timey = timeStamp();
 
-  //Combining UserName (Time): Message || Stores entire line in one string
-  char * chatLine = calloc(256, sizeof(char));
-  chatLine = strcat(name, timey);
-  chatLine = strcat(chatLine, message);
+    //Combining UserName (Time): Message || Stores entire line in one string
+    char * chatLine = calloc(256, sizeof(char));
+    chatLine = strcat(name, timey);
+    chatLine = strcat(chatLine, message);
 
-  printf("%s", chatLine);
+    printf("\e[1;1H\e[2J");
 
-  //Node contains string "Hana Kim (12:02:35): hello world"
-  addMessage(message);
+    printf("%s ", chatLine);
+
+    //Node contains string "Hana Kim (12:02:35): hello world"
+    addMessage(msg, message);
+
+
+    printf("%c[2K", 27);
+
+
   }
 
 
