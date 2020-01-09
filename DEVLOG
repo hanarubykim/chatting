@@ -9,7 +9,7 @@ DEVLOG
   * Continued experimenting with networking code
 
 - 1/7: Hana
-  * Began working on proper output of chat lines.
+  * Began working on proper output of chat lines. Recording message timestamps.
 
 - 1/8: Hana
   * Fixed display of chatroom. Storing chat lines. Displaying all messages.
