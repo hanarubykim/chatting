@@ -25,9 +25,13 @@ char * timeStamp(){
 //   push(pq, message);
 // }
 
-void addMessage(Node **pq, char * message){
-  printf("THIS WORKS");
-  push(pq, message);
+// void addMessage(Node **pq, char * message){
+//   printf("THIS WORKS");
+//   push(pq, message);
+// }
+
+void addMessage(Node ** head, char * message){
+  push(head, message);
 }
 
 int main(){
@@ -64,21 +68,20 @@ int main(){
 
   while(1){
     Node ** msg = malloc(sizeof(Node));
-    char message[256];
-    fgets(message, 256, stdin);
+    addMessage(msg, "MAYBE");
+
+    char message[10000];
+    fgets(message, 10000, stdin);
     message[strlen(message) - 1] = '\n';
     message[strlen(message)] = '\0';
-
     char * timey = timeStamp();
-
     //Combining UserName (Time): Message || Stores entire line in one string
     char * chatLine = calloc(256, sizeof(char));
     chatLine = strcat(name, timey);
     chatLine = strcat(chatLine, message);
 
     //Node contains string "Hana Kim (12:02:35): hello world"
-    addMessage(msg, message);
-    printf("THIS HERE SHOULD HAVE HAPPENED");
+    addMessage(msg, chatLine);
 
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
@@ -88,13 +91,10 @@ int main(){
     //Print out all the messages
     Node ** tempCopy = malloc(sizeof(Node));
     tempCopy = copy(msg);
-    printf("HEAD: %s", print(*msg));
-    //printf("%s", tempCopy->data);
-    // while(!isEmpty(tempCopy)){
-    //   printf("%s", (*tempCopy)->data);
-    //   pop(tempCopy);
-    // }
-    //printf("%c[2K", 27);
+    while(!isEmpty(tempCopy)){
+      printf("%s", (*tempCopy)->data);
+      pop(tempCopy);
+    }
   }
 
 
