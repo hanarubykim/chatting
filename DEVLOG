@@ -19,3 +19,6 @@ DEVLOG
 
 - 1/9: Christy
   * Spent class time working on fixing Node class, but unsuccessful. At home, I continued working on networking
+
+- 1/12: Christy
+  * Worked on copy function in priority queue. Fixed some parts, but there is one final seg fault
