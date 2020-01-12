@@ -70,8 +70,12 @@ int main(){
     Node ** msg = malloc(sizeof(Node));
     addMessage(msg, "MAYBE");
 
-    char message[10000];
-    fgets(message, 10000, stdin);
+    // printf("%s", (*msg)->data;
+
+
+
+    char message[256];
+    fgets(message, 256, stdin);
     message[strlen(message) - 1] = '\n';
     message[strlen(message)] = '\0';
     char * timey = timeStamp();
@@ -83,18 +87,26 @@ int main(){
     //Node contains string "Hana Kim (12:02:35): hello world"
     addMessage(msg, chatLine);
 
+    // printf("%s", (*msg)->data);
+    // (*msg) = (*msg)->next;
+    // printf("%s", (*msg)->data);
+
+
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
     printf("WELCOME TO CHAT ROOM\n");
     printf("**************************\n");
 
+
     //Print out all the messages
     Node ** tempCopy = malloc(sizeof(Node));
+    printf("AB TO COPY");
     tempCopy = copy(msg);
+    printf("DONE COPY");
     while(!isEmpty(tempCopy)){
-      printf("%s", (*tempCopy)->data);
+      printf("%s\n", (*tempCopy)->data);
       pop(tempCopy);
-    }
+    }   
   }
 
 

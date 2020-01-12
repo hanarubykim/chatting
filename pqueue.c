@@ -24,7 +24,7 @@ char* peek(Node** head){
 void pop(Node** head){
   Node* temp = *head;
   (*head) = (*head)->next;
-  //free(temp);
+  // free(temp);
 }
 
 //function to push according to priority
@@ -34,6 +34,7 @@ void push(Node ** head, char * d){
   Node* temp = newNode(d);
   temp->next = *head;
   (*head) = temp;
+  // printf("SUCCESS");
 }
 
 //function to check is list is empty
@@ -48,21 +49,57 @@ Node ** copy(Node ** head){
   Node ** tail = NULL;
   while(current != NULL){
     if(newHead == NULL){
+      printf("INSIDE IF");
       newHead = malloc(sizeof(Node));
-      (*newHead)->data = (*current)->data;
-      (*newHead)->next = NULL;
-      //(*tail) = (*newHead);
+      Node * temp = newNode((*current)->data);
+      (*newHead) = temp;
+      free(temp);
     }
     else
     {
-      (*tail)->next = (Node *)malloc(sizeof(Node));
-      (*tail) = (*tail)->next;
-      (*tail)->data = (*current)->data;
-      (*tail)->next = NULL;
+      printf("INSIDE ELSE\n");
+
+      tail = malloc(sizeof(Node));
+      Node * temp = (Node *)malloc(sizeof(Node));
+      (*tail) = temp;
+
+      Node * temp2 = newNode((*current)->data);
+      (*tail) = temp2;
+
+      // free(temp);
+      // free(temp2);
+
     }
     (*current) = (*current)->next;
-    return newHead;
   }
+  // printf("AFTER LOOP");
+  return newHead;
+}
+
+
+//
+// Node ** copy(Node ** head){
+//   Node ** current = malloc(sizeof(Node));
+//   current = head;
+//   Node ** newHead = NULL;
+//   Node ** tail = NULL;
+//   while(current != NULL){
+//     if(newHead == NULL){
+//       newHead = malloc(sizeof(Node));
+//       (*newHead)->data = (*current)->data;
+//       (*newHead)->next = NULL;
+//       //(*tail) = (*newHead);
+//     }
+//     else
+//     {
+//       (*tail)->next = (Node *)malloc(sizeof(Node));
+//       (*tail) = (*tail)->next;
+//       (*tail)->data = (*current)->data;
+//       (*tail)->next = NULL;
+//     }
+//     (*current) = (*current)->next;
+//     return newHead;
+//   }
 
   // Node ** newHead = malloc(sizeof(Node));
   // *newHead = (*head);
@@ -76,7 +113,7 @@ Node ** copy(Node ** head){
   // }
   // (*prev)->next = NULL;
   // return newHead;
-}
+
 
 
 // //function to create a new node
