@@ -16,13 +16,13 @@ void error_check( int i, char *s ) {
 
   returns the socket descriptor
   =========================*/
-int server_setup() {
+int server_setup(char * portN) {
   int sd, i;
 
   //create the socket
-  sd = socket( AF_INET, SOCK_STREAM, 0 );
-  error_check( sd, "server socket" );
-  printf("[server%s] socket created\n", PORT);
+  sd = socket(AF_INET, SOCK_STREAM, 0 );
+  error_check(sd, "server socket" );
+  printf("[server%s] socket created\n", portN);
 
   //setup structs for getaddrinfo
   struct addrinfo * hints, * results;
@@ -30,17 +30,17 @@ int server_setup() {
   hints->ai_family = AF_INET;  //IPv4 address
   hints->ai_socktype = SOCK_STREAM;  //TCP socket
   hints->ai_flags = AI_PASSIVE;  //Use all valid addresses
-  getaddrinfo(NULL, PORT, hints, &results); //NULL means use local address
+  getaddrinfo(NULL, portN, hints, &results); //NULL means use local address
 
   //bind the socket to address and port
   i = bind( sd, results->ai_addr, results->ai_addrlen );
   error_check( i, "server bind" );
-  printf("[server%s] socket bound\n", PORT);
+  printf("[server%s] socket bound\n", portN);
 
   //set socket to listen state
   i = listen(sd, 10);
   error_check( i, "server listen" );
-  printf("[server%s] socket in listen state\n", PORT);
+  printf("[server%s] socket in listen state\n", portN);
 
   //free the structs used by getaddrinfo
   free(hints);
@@ -82,11 +82,10 @@ int server_connect(int sd) {
 
   returns the file descriptor for the socket
   =========================*/
-//NEED TO FIX THIS LATER
-int client_setup(char * server) {
+
+int client_setup(char * server, char * portN) {
   int sd, i;
 
-  //create the socket
   sd = socket( AF_INET, SOCK_STREAM, 0 );
   error_check( sd, "client socket" );
 
@@ -94,7 +93,7 @@ int client_setup(char * server) {
   hints = (struct addrinfo *)calloc(1, sizeof(struct addrinfo));
   hints->ai_family = AF_INET;  //IPv4
   hints->ai_socktype = SOCK_STREAM;  //TCP socket
-  getaddrinfo(server, PORT, hints, &results);
+  getaddrinfo(server, portN, hints, &results);
 
   i = connect( sd, results->ai_addr, results->ai_addrlen );
   error_check( i, "client connect" );

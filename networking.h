@@ -20,7 +20,7 @@
 void error_check(int i, char *s);
 int server_setup();
 int server_connect(int sd);
-int client_setup(char * server);
+int client_setup(char * server, char * portN);
 
 
 #endif

@@ -1,10 +1,16 @@
 #include "networking.h"
+#include <time.h>
 
 int check;
 char username[256];
 
 int booting(){
-  char name[256];
+  char name[256];int main(int argc, char **argv) {
+  if (argc == 2)
+    server_socket = channel(argv[1], PORT);
+  else
+    server_socket = channel(TEST_IP, PORT );
+  }
   printf("Enter your name: ");
   fgets(name, 256, stdin);
   name[strlen(name) - 1] = '\0';
@@ -32,13 +38,6 @@ char * timeStamp(){
   return timey;
 }
 
-int main(int argc, char **argv) {
-  if (argc == 2)
-    server_socket = channel( argv[1], PORT);
-  else
-    server_socket = channel( TEST_IP, PORT );
-  }
-
 void channel(char * ip, char * portNum){
   int server_socket;
   char buffer[BUFFER_SIZE];
@@ -50,13 +49,7 @@ void channel(char * ip, char * portNum){
   printf("\e[1;1H\e[2J");
 
   while (1){
-    // printf("enter data: ");
-    //the above printf does not have \n
-    //flush the buffer to immediately print
     fflush(stdout);
-
-    //select() modifies read_fds
-    //we must reset it at each iteration
     FD_ZERO(&read_fds);
     FD_SET(STDIN_FILENO, &read_fds);
     FD_SET(server_socket, &read_fds);
@@ -75,15 +68,22 @@ void channel(char * ip, char * portNum){
       //   char temp[BUFFER_SIZE];
       //   temp = buffer;
       // }
-
+      char * timey = timeStamp();
       char * chatLine = calloc(256, sizeof(char));
-      chatLine = strcat(name, timey);
+      chatLine = strcat(username, timey);
       chatLine = strcat(chatLine, message);
 
-      write(server_socket, msg, sizeof(chatLine));
+      write(server_socket, message, sizeof(chatLine));
       read(server_socket, buffer, sizeof(buffer));
 
 
+}
+
+int main(int argc, char **argv) {
+  if (argc == 2)
+    server_socket = channel( argv[1], PORT);
+  else
+    server_socket = channel( TEST_IP, PORT );
 }
 
 
@@ -104,11 +104,16 @@ void channel(char * ip, char * portNum){
 //
 //     printf("enter data: ");
 //     //the above printf does not have \n
-//     //flush the buffer to immediately print
+//     //flush the buffer to immediately print# forking: client fserver
 //     fflush(stdout);
 //
 //     //select() modifies read_fds
-//     //we must reset it at each iteration
+// //     //we must reset it at each iterationint main(int argc, char **argv) {
+//   if (argc == 2)
+//     server_socket = channel( argv[1], PORT);
+//   else
+//     server_socket = channel( TEST_IP, PORT );
+//   }
 //     FD_ZERO(&read_fds);
 //     FD_SET(STDIN_FILENO, &read_fds); //add stdin to fd set
 //     FD_SET(server_socket, &read_fds); //add socket to fd set
