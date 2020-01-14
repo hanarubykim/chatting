@@ -20,5 +20,11 @@ DEVLOG
 - 1/9: Christy
   * Spent class time working on fixing Node class, but unsuccessful. At home, I continued working on networking
 
+- 1/9: Christy
+  * Spent class time attempting to change Node class from double to single pointers. Ran into abort traps and seg faults.
+
 - 1/12: Christy
   * Worked on copy function in priority queue. Fixed some parts, but there is one final seg fault
+
+- 1/13: Hana
+  * Worked on Node again, but continued to run into seg faults even with debugging. Decided to abandon using Nodes to store messages. Moving around functions to appropriate files.

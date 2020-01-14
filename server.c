@@ -35,20 +35,6 @@ void addMessage(Node ** head, char * message){
 }
 
 int main(){
-  //Node ** msg = malloc(sizeof(Node));
-  //TESTING CODE FOR PRIORITY QUEUE
-  //each node is data
-
-  // Node* pq = newNode("m1");
-  // push(&pq, "m2");
-  // push(&pq, "m3");
-  // push(&pq, "m4");
-  // //will output m4 m3 m2 m1
-  // while (!isEmpty(&pq)) {
-  //   printf("%s \n", peek(&pq));
-  //   pop(&pq);
-  // }
-
   //******************************************************************************
   //ACTUAL CODE OF THE CHAT ROOM
   //asks for name, message
@@ -70,9 +56,6 @@ int main(){
     Node ** msg = malloc(sizeof(Node));
     addMessage(msg, "MAYBE");
 
-    // printf("%s", (*msg)->data;
-
-
 
     char message[256];
     fgets(message, 256, stdin);
@@ -87,31 +70,12 @@ int main(){
     //Node contains string "Hana Kim (12:02:35): hello world"
     addMessage(msg, chatLine);
 
-    // printf("%s", (*msg)->data);
-    // (*msg) = (*msg)->next;
-    // printf("%s", (*msg)->data);
-
-
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
     printf("WELCOME TO CHAT ROOM\n");
     printf("**************************\n");
 
-
-    //Print out all the messages
-    Node ** tempCopy = malloc(sizeof(Node));
-    printf("AB TO COPY");
-    tempCopy = copy(msg);
-    printf("DONE COPY");
-    while(!isEmpty(tempCopy)){
-      printf("%s\n", (*tempCopy)->data);
-      pop(tempCopy);
-    }   
   }
-
-
-
-
 
 
   return 0;
