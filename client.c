@@ -25,9 +25,9 @@ int main(int argc, char **argv) {
   int server_socket;
   char buffer[BUFFER_SIZE];
   char portNum[BUFFER_SIZE];
-  [printf("Enter port# between 49152-65535: ");
+  printf("Enter port# between 49152-65535: ");
   fgets(portNum, sizeof(portNum), stdin);
-  *strchr(portNum, '\n') = 0;]
+  *strchr(portNum, '\n') = 0;
 
   if (argc == 2)
     server_socket = client_setup( argv[1], portNum);

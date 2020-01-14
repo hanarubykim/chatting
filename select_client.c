@@ -17,6 +17,21 @@ int booting(){
 
   return 0;
 }
+
+char * timeStamp(){
+  time(NULL);
+  time_t now;
+  char * timey = ctime(&now);
+  timey[strcspn(timey, "\n")] = '\0';
+  char * paren1 = calloc(100, sizeof(char));
+  strcpy(paren1, " (");
+  char * paren2 = calloc(100, sizeof(char));
+  strcpy(paren2, "): ");
+  timey = strcat(paren1, timey);
+  timey = strcat(timey, paren2);
+  return timey;
+}
+
 int main(int argc, char **argv) {
   if (argc == 2)
     server_socket = channel( argv[1], PORT);

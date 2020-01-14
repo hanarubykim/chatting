@@ -21,17 +21,8 @@ char * timeStamp(){
   return timey;
 }
 
-void addMessage(Node * head, char * message){
-  push(head, message);
-}
 
 int main(){
-  //******************************************************************************
-  //ACTUAL CODE OF THE CHAT ROOM
-  //asks for name, message
-  //right now, focus on having just one user
-  //each time a user enters a message, create a node
-
   char name[256];
   printf("Enter your name: ");
   fgets(name, 256, stdin);
@@ -54,9 +45,6 @@ int main(){
     char * chatLine = calloc(256, sizeof(char));
     chatLine = strcat(tempName, timey);
     chatLine = strcat(chatLine, message);
-
-    //Node contains string "Hana Kim (12:02:35): hello world"
-    addMessage(msg, chatLine);
 
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
