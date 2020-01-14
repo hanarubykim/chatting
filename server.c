@@ -26,7 +26,12 @@ void addMessage(Node * head, char * message){
 }
 
 int main(){
-  Node * msg = newNode("DEFAULT");
+  //******************************************************************************
+  //ACTUAL CODE OF THE CHAT ROOM
+  //asks for name, message
+  //right now, focus on having just one user
+  //each time a user enters a message, create a node
+
   char name[256];
   printf("Enter your name: ");
   fgets(name, 256, stdin);
@@ -52,28 +57,13 @@ int main(){
 
     //Node contains string "Hana Kim (12:02:35): hello world"
     addMessage(msg, chatLine);
-    printf("PRINT THE CHATLINE: %s", chatLine);
+
     printf("\e[1;1H\e[2J");
     printf("**************************\n");
     printf("WELCOME TO CHAT ROOM\n");
     printf("**************************\n");
 
-    //Print out all the messages
-    // Node * tempCopy = malloc(sizeof(Node));
-    // tempCopy = copy(msg);
-    // while(tempCopy != NULL){
-    //   printf("%s\n", tempCopy->data);
-    //   pop(tempCopy);
-    // }
   }
-
-
-
-
-
-
-
-
 
 
   return 0;

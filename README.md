@@ -25,7 +25,7 @@ How you will be using the topics covered in class in the project:
 
 How you are breaking down the project and who is responsible for which parts:
 - Making basic shell of chatroom: Hana
-- Priority Queue: Christy
+- : Christy
 - Customizing the chatroom: Hana
 - Networking: Christy
 
@@ -34,14 +34,11 @@ What algorithms and /or data structures you will be using, and how:
   * Original names set by users
   * Nicknames
   * Chatroom name
-- Priority Queue to store the content of a message and the date the message was sent
-  * Allows for insertion and deletion in O(1) time
 
 
 
 A timeline with expected completion dates of parts of the project:
 - 1/4: User inputs message, program is able to store the message
-- 1/7: Use priority queues to store messages in order by date
 - 1/8: User can customize nicknames
 - 1/11: Figure out networking
 - 1/13: User can create multiple chatrooms and navigate between them
