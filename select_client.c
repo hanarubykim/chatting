@@ -29,7 +29,7 @@ void channel(char * ip, char * portNum){
   fd_set read_fds;
 
   server_socket = client_setup(ip, portNum);
-  printf("\e[1;1H\e[2J");
+  //printf("\e[1;1H\e[2J");
 
   while (1){
     fflush(stdout);
@@ -55,9 +55,12 @@ void channel(char * ip, char * portNum){
       char * chatLine = calloc(256, sizeof(char));
       chatLine = strcat(username, timey);
       chatLine = strcat(chatLine, message);
+      chatLine = strcat(chatLine, "\n");
 
-      write(server_socket, message, sizeof(chatLine));
+
+      write(server_socket, chatLine, sizeof(chatLine));
       read(server_socket, buffer, sizeof(buffer));
+
     }
   }
 
@@ -73,13 +76,7 @@ void channel(char * ip, char * portNum){
 
 
 
-int main(int argc, char **argv) {
-  if (argc == 2) {
-    channel(argv[1], PORT);
-  }
-  else {
-    channel(TEST_IP, PORT );
-  }
+int main(int argc, char **argv){
   char name[256];
   printf("Enter your name: ");
   fgets(name, 256, stdin);
@@ -88,8 +85,14 @@ int main(int argc, char **argv) {
   printf("**************************\n");
   printf("WELCOME TO CHAT ROOM\n");
   printf("**************************\n");
-  printf("Welcome, [%s]\n", name);
+  printf("Welcome, |%s|\n", name);
   printf("You can now enter messages!\n");
+  if (argc == 2) {
+    channel(argv[1], PORT);
+  }
+  else {
+    channel(TEST_IP, PORT);
+  }
 
   return 0;
 }
