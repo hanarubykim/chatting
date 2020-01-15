@@ -4,25 +4,8 @@
 int check;
 char username[256];
 
-int booting(){
-  char name[256];int main(int argc, char **argv) {
-  if (argc == 2)
-    server_socket = channel(argv[1], PORT);
-  else
-    server_socket = channel(TEST_IP, PORT );
-  }
-  printf("Enter your name: ");
-  fgets(name, 256, stdin);
-  name[strlen(name) - 1] = '\0';
-  printf("\e[1;1H\e[2J");
-  printf("**************************\n");
-  printf("WELCOME TO CHAT ROOM\n");
-  printf("**************************\n");
-  printf("Welcome, [%s]\n", name);
-  printf("You can now enter messages!\n");
-
-  return 0;
-}
+// int booting(){
+//   char name[256];
 
 char * timeStamp(){
   time(NULL);
@@ -60,7 +43,7 @@ void channel(char * ip, char * portNum){
     if (FD_ISSET(STDIN_FILENO, &read_fds)) {
       char message[BUFFER_SIZE];
       //check what this prints out exactly
-      printf("\e[1m\e[92m%s: \e[21m\e[39m", username);
+      printf("%s: ", username);
       fgets(buffer, sizeof(buffer), stdin);
       *strchr(buffer, '\n') = 0;
 
@@ -75,16 +58,42 @@ void channel(char * ip, char * portNum){
 
       write(server_socket, message, sizeof(chatLine));
       read(server_socket, buffer, sizeof(buffer));
-
+    }
+  }
 
 }
+
+// int main(int argc, char **argv) {
+//   if (argc == 2)
+//     server_socket = channel( argv[1], PORT);
+//   else
+//     server_socket = channel( TEST_IP, PORT );
+// }
+
+
+
 
 int main(int argc, char **argv) {
-  if (argc == 2)
-    server_socket = channel( argv[1], PORT);
-  else
-    server_socket = channel( TEST_IP, PORT );
+  if (argc == 2) {
+    channel(argv[1], PORT);
+  }
+  else {
+    channel(TEST_IP, PORT );
+  }
+  char name[256];
+  printf("Enter your name: ");
+  fgets(name, 256, stdin);
+  name[strlen(name) - 1] = '\0';
+  printf("\e[1;1H\e[2J");
+  printf("**************************\n");
+  printf("WELCOME TO CHAT ROOM\n");
+  printf("**************************\n");
+  printf("Welcome, [%s]\n", name);
+  printf("You can now enter messages!\n");
+
+  return 0;
 }
+
 
 
 
