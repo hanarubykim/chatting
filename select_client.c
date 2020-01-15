@@ -4,8 +4,25 @@
 int check;
 char username[256];
 
-// int booting(){
-//   char name[256];
+
+
+int booting(){
+  char name[256];
+  printf("\e[1;1H\e[2J");
+  printf("Enter your name: ");
+  fgets(name, 256, stdin);
+  name[strlen(name) - 1] = '\0';
+  printf("\e[1;1H\e[2J");
+  printf("**************************\n");
+  printf("WELCOME TO CHAT ROOM\n");
+  printf("**************************\n");
+  printf("Welcome, [%s]\n", name);
+  printf("You can now enter messages!\n");
+
+  return 1;
+}
+
+
 
 char * timeStamp(){
   time(NULL);
@@ -31,36 +48,43 @@ void channel(char * ip, char * portNum){
   server_socket = client_setup(ip, portNum);
   //printf("\e[1;1H\e[2J");
 
+  check = 1;
+
   while (1){
-    fflush(stdout);
-    FD_ZERO(&read_fds);
-    FD_SET(STDIN_FILENO, &read_fds);
-    FD_SET(server_socket, &read_fds);
+    if(check == 1){
+      fflush(stdout);
+      FD_ZERO(&read_fds);
+      FD_SET(STDIN_FILENO, &read_fds);
+      FD_SET(server_socket, &read_fds);
 
-    //select will block until either fd is ready
-    select(server_socket + 1, &read_fds, NULL, NULL, NULL);
+      //select will block until either fd is ready
+      select(server_socket + 1, &read_fds, NULL, NULL, NULL);
 
-    if (FD_ISSET(STDIN_FILENO, &read_fds)) {
-      char message[BUFFER_SIZE];
-      //check what this prints out exactly
-      printf("%s: ", username);
-      fgets(buffer, sizeof(buffer), stdin);
-      *strchr(buffer, '\n') = 0;
+      if (FD_ISSET(STDIN_FILENO, &read_fds)) {
 
-      // if(strstr(buffer, "#in")){
-      //   char temp[BUFFER_SIZE];
-      //   temp = buffer;
-      // }
-      char * timey = timeStamp();
-      char * chatLine = calloc(256, sizeof(char));
-      chatLine = strcat(username, timey);
-      chatLine = strcat(chatLine, message);
-      chatLine = strcat(chatLine, "\n");
+        char buffer[BUFFER_SIZE];
+        //check what this prints out exactly
+        printf("%s: ", username);
+        fgets(buffer, sizeof(buffer), stdin);
+        *strchr(buffer, '\n') = 0;
+
+        // if(strstr(buffer, "#in")){
+        //   char temp[BUFFER_SIZE];
+        //   temp = buffer;
+        // }
+        char * timey = timeStamp();
+        char * chatLine = calloc(256, sizeof(char));
+        chatLine = strcat(username, timey);
+        chatLine = strcat(chatLine, buffer);
+        chatLine = strcat(chatLine, "\n");
 
 
-      write(server_socket, chatLine, sizeof(chatLine));
-      read(server_socket, buffer, sizeof(buffer));
+        write(server_socket, buffer, sizeof(buffer));
+        read(server_socket, buffer, sizeof(buffer));
 
+      }
+    } else{
+      check = booting();
     }
   }
 
@@ -93,6 +117,8 @@ int main(int argc, char **argv){
   else {
     channel(TEST_IP, PORT);
   }
+
+  int check = booting();
 
   return 0;
 }
