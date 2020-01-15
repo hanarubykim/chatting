@@ -1,5 +1,7 @@
 # forking: client fserver
 
+go: sclient sserver
+
 sserver: select_server.o networking.o
 	gcc -o server select_server.o networking.o
 
