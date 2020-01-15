@@ -10,18 +10,19 @@ int main(){
   channel(PORT);
 }
 
-//simple parsing, helper for sighandler function
-char ** parse_args(char * line, char * split) {
-    line = strsep(&line, "\n");
-    char ** args = malloc(sizeof(char *) * 10);
-    int x = 0;
-    while (line) {
-        args[x] = strsep( &line, split);
-        x += 1;
-    }
-    args[x] = NULL;
-    return args;
-}
+// //simple parsing, helper for handleSigs function
+//DONT NEED handleSigs function
+// char ** parse_args(char * line, char * split) {
+//     line = strsep(&line, "\n");
+//     char ** args = malloc(sizeof(char *) * 10);
+//     int x = 0;
+//     while (line) {
+//         args[x] = strsep( &line, split);
+//         x += 1;
+//     }
+//     args[x] = NULL;
+//     return args;
+// }
 
 // //to avoid "address already in use"
 // static void handleSigs(int sigN) {
