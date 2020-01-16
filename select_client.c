@@ -2,7 +2,7 @@
 #include <time.h>
 
 int check;
-char username[256];
+char name[256];
 
 
 
@@ -40,7 +40,7 @@ char * timeStamp(){
 
 void channel(char * ip, char * portNum){
   int server_socket;
-  char buffer[BUFFER_SIZE];
+  char buffer[BUFFER_SIZE];name
   int f;
 
   fd_set read_fds;
@@ -52,7 +52,7 @@ void channel(char * ip, char * portNum){
 
   while (1){
     if(check == 1){
-      fflush(stdout);
+      fflush(stdout);name
       FD_ZERO(&read_fds);
       FD_SET(STDIN_FILENO, &read_fds);
       FD_SET(server_socket, &read_fds);
@@ -61,23 +61,25 @@ void channel(char * ip, char * portNum){
       select(server_socket + 1, &read_fds, NULL, NULL, NULL);
 
       if (FD_ISSET(STDIN_FILENO, &read_fds)) {
-
+        printf("\e[1;1H\e[2J");
+        printf("**************************\n");
+        printf("WELCOME TO CHAT ROOM\n");
+        printf("**************************\n");
         char buffer[BUFFER_SIZE];
         //check what this prints out exactly
-        printf("%s: ", username);
+        //printf("%s: ", username);
         fgets(buffer, sizeof(buffer), stdin);
         *strchr(buffer, '\n') = 0;
-
+        //printf("%s: ", username);
         // if(strstr(buffer, "#in")){
-        //   char temp[BUFFER_SIZE];
+        //   char temp[BU        printf("%s: ", username);FFER_SIZE];
         //   temp = buffer;
         // }
         char * timey = timeStamp();
         char * chatLine = calloc(256, sizeof(char));
-        chatLine = strcat(username, timey);
+        chatLine = strcat(name, timey);
         chatLine = strcat(chatLine, buffer);
         chatLine = strcat(chatLine, "\n");
-
 
         write(server_socket, buffer, sizeof(buffer));
         read(server_socket, buffer, sizeof(buffer));
@@ -96,7 +98,6 @@ void channel(char * ip, char * portNum){
 //   else
 //     server_socket = channel( TEST_IP, PORT );
 // }
-
 
 
 
