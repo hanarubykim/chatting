@@ -11,7 +11,7 @@ sserver: select_server.o networking.o
 sclient: select_client.o networking.o
 	gcc -o client select_client.o networking.o
 
-//PROBABLY DONT NEED THIS
+#PROBABLY DONT NEED THIS
 # client: client.o networking.o
 # 	gcc -o client client.o networking.o
 

@@ -8,6 +8,7 @@
 
 int booting(){
   char name[256];
+  printf("\e[1;1H\e[2J");
   printf("Enter your name: ");
   fgets(name, 256, stdin);
   name[strlen(name) - 1] = '\0';
