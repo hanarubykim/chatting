@@ -2,29 +2,83 @@
 #include <time.h>
 
 int check;
-char name[256];
+char clientName[256];
+char * coloring[7];
 
+//FOR CLIENTS: [4
+//FOR TEXT: [1
 
+char * chosenClientColor;
 
 int booting(){
-  char name[256];
   printf("\e[1;1H\e[2J");
   printf("Enter your name: ");
-  fgets(name, 256, stdin);
-  name[strlen(name) - 1] = '\0';
+  fgets(clientName, 256, stdin);
+  clientName[strlen(clientName) - 1] = '\0';
   printf("\e[1;1H\e[2J");
   printf("**************************\n");
   printf("WELCOME TO CHAT ROOM\n");
   printf("**************************\n");
-  printf("Welcome, [%s]\n", name);
+  printf("Welcome, [%s]\n", client);
   printf("You can now enter messages!\n");
+
+  printf("WOULD YOU LIKE TO CHOOSE A COLOR FOR YOUR USERNAME? [yes] or [no]\n");
+  char decide[256];
+  fgets(decide, 256, stdin);
+  decide[strlen(decide) - 1] = '\0';
+  if(strstr(decide, "yes")){
+    colors();
+    choosingColor();
+  }
+  else{
+    printf("Alrighty then! That's fine too. :) \n");
+  }
 
   return 1;
 }
 
+void colors(){
+  char * red = ";31m";
+  char * green = ";32m";
+  char * yellow = ";33m";
+  char * blue = ";34m";
+  char * magenta = ";35m";
+  char * cyan = ";36m";
+  char * reset = ";37m";
 
+  coloring[1] = red;
+  coloring[2] = green;
+  coloring[3] = yellow;
+  coloring[4] = blue;
+  coloring[5] = magenta;
+  coloring[6] = cyan;
+  coloring[7] = reset;
+}
+
+void choosingColor(){
+  printf("CHOOSING USERNAME COLOR... HERE ARE YOUR OPTIONS\n");
+  printf("(1) RED\n(2) GREEN\n(3) YELLOW\n(4) BLUE\n(5) MAGENTA\n(6) CYAN\n(7) WHITE\n\n");
+  printf("PLEASE ENTER THE NUMBER OF YOUR DESIRED USERNAME COLOR: ");
+
+  char colorNum[256];
+  fgets(colorNum, 256, stdin);
+  colorNum[strlen(colorNum) - 1] = '\0';
+  int chosen = atoi(colorNum);
+
+  chosenClientColor = coloring[chosen];
+  char * coloredName = calloc(256, sizeof(char));
+  coloredName = strcat("\033[4", chosenClientColor);
+  coloredName = strcat(coloredName, clientName);
+  coloredName = strcat(coloredName, "\033[1");
+  coloredName = strcat(coloredName, clientColoring[7]);
+
+  clientName = coloredName;
+  //return clientColoring[chosen];
+  //printf("\033%sHELLO\033%s\n", clientColoring[chosen], clientColoring[7]);
+}
 
 char * timeStamp(){
+  char * fullLine = calloc(256, sizeof(char));
   time(NULL);
   time_t now;
   char * timey = ctime(&now);
@@ -35,7 +89,10 @@ char * timeStamp(){
   strcpy(paren2, "): ");
   timey = strcat(paren1, timey);
   timey = strcat(timey, paren2);
-  return timey;
+  fullLine = strcat(clientName, " ");
+  fullLine = strcat(fullLine, timey);
+
+  return fullLine;
 }
 
 void channel(char * ip, char * portNum){
@@ -46,7 +103,6 @@ void channel(char * ip, char * portNum){
   fd_set read_fds;
 
   server_socket = client_setup(ip, portNum);
-  //printf("\e[1;1H\e[2J");
 
   check = 1;
 
@@ -65,24 +121,25 @@ void channel(char * ip, char * portNum){
         printf("**************************\n");
         printf("WELCOME TO CHAT ROOM\n");
         printf("**************************\n");
-        char buffer[BUFFER_SIZE];
-        //check what this prints out exactly
-        //printf("%s: ", username);
-        fgets(buffer, sizeof(buffer), stdin);
-        *strchr(buffer, '\n') = 0;
+        char message[BUFFER_SIZE];
+        fgets(message, sizeof(message), stdin);
+        *strchr(message, '\n') = 0;
+
         //printf("%s: ", username);
         // if(strstr(buffer, "#in")){
         //   char temp[BU        printf("%s: ", username);FFER_SIZE];
         //   temp = buffer;
         // }
+
         char * timey = timeStamp();
         char * chatLine = calloc(256, sizeof(char));
-        chatLine = strcat(name, timey);
-        chatLine = strcat(chatLine, buffer);
+        chatLine = strcat(clientName, timey);
+        chatLine = strcat(chatLine, message);
         chatLine = strcat(chatLine, "\n");
 
-        write(server_socket, buffer, sizeof(buffer));
-        read(server_socket, buffer, sizeof(buffer));
+        //TEST OUT WHAT WRITE VS WHAT READ DOES TOMORROW
+        write(server_socket, message, sizeof(message));
+        read(server_socket, message, sizeof(message));
 
       }
     } else{
@@ -102,16 +159,17 @@ void channel(char * ip, char * portNum){
 
 
 int main(int argc, char **argv){
-  char name[256];
-  printf("Enter your name: ");
-  fgets(name, 256, stdin);
-  name[strlen(name) - 1] = '\0';
-  printf("\e[1;1H\e[2J");
-  printf("**************************\n");
-  printf("WELCOME TO CHAT ROOM\n");
-  printf("**************************\n");
-  printf("Welcome, |%s|\n", name);
-  printf("You can now enter messages!\n");
+  // redundant code BUT might be wrong
+  // printf("Enter your name: ");
+  // fgets(clientName, 256, stdin);
+  // name[strlen(name) - 1] = '\0';
+  // printf("\e[1;1H\e[2J");
+  // printf("**************************\n");
+  // printf("WELCOME TO CHAT ROOM\n");
+  // printf("**************************\n");
+  // printf("Welcome, |%s|\n", name);
+  // printf("You can now enter messages!\n");
+
   if (argc == 2) {
     channel(argv[1], PORT);
   }

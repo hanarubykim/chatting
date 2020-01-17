@@ -86,7 +86,7 @@ void channel(char * portNum){
         client_socket = server_connect(listen_socket);
 
         //for testing client select statement
-        strncpy(buffer, "WELCOME", sizeof(buffer));
+        strncpy(buffer, "DOES THIS OUTPUT ANYTHING?!\n", sizeof(buffer));
         write(client_socket, buffer, sizeof(buffer));
 
 
@@ -95,7 +95,7 @@ void channel(char * portNum){
         for (i = 0; i < max_clients; i++) {
             if (!clientsConnected[i]) {
                 clientsConnected[i] = client_socket;
-                printf("client %d has connected to port %s\n", client_socket, portNum);
+                printf("USER %d has connected to port %s\n", client_socket, portNum);
                 break;
             }
         }
