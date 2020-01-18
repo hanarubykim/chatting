@@ -29,28 +29,41 @@ void colors(){
 }
 
 void choosingColor(){
-  // printf("CHOOSING USERNAME COLOR... HERE ARE YOUR OPTIONS\n");
-  // printf("(1) RED\n(2) GREEN\n(3) YELLOW\n(4) BLUE\n(5) MAGENTA\n(6) CYAN\n(7) WHITE\n\n");
-  // printf("PLEASE ENTER THE NUMBER OF YOUR DESIRED USERNAME COLOR: ");
-  //
-  // char colorNum[256];
-  // fgets(colorNum, 256, stdin);
-  // colorNum[strlen(colorNum) - 1] = '\0';
-  //
-  // int chosen = atoi(colorNum);
-  //
+  colors(); //sets up the array of colors
+  printf("CHOOSING USERNAME COLOR... HERE ARE YOUR OPTIONS\n");
+  printf("(1) RED\n(2) GREEN\n(3) YELLOW\n(4) BLUE\n(5) MAGENTA\n(6) CYAN\n(7) WHITE\n\n");
+  printf("PLEASE ENTER THE NUMBER OF YOUR DESIRED USERNAME COLOR: ");
+
+  char colorNum[256];
+  fgets(colorNum, 256, stdin);
+  colorNum[strlen(colorNum) - 1] = '\0';
+
+  int chosen = atoi(colorNum);
+
   // chosenClientColor = coloring[chosen];
   // char * coloredName = calloc(256, sizeof(char));
   // coloredName = strcat("\033[4", chosenClientColor);
   // coloredName = strcat(coloredName, clientName);
   // coloredName = strcat(coloredName, "\033[1");
-  // coloredName = strcat(coloredName, coloring[7]);
-  //
-  // //clientName = coloredName;
-  // strcpy(clientName, coloredName);
-  // printf("%s", clientName);
-  // //return clientColoring[chosen];
-  // //printf("\033%sHELLO\033%s\n", clientColoring[chosen], clientColoring[7]);
+  // coloredName = strcat(coloredName, coloring[6]);
+
+
+  chosenClientColor = calloc(256, sizeof(char));
+  strcpy(chosenClientColor, coloring[chosen]);
+
+
+  char * coloredName = calloc(256, sizeof(char));
+  strcpy(coloredName, "\033[4");
+
+  strcat(coloredName, chosenClientColor);
+
+  strcat(coloredName, "\033[1");
+
+  //clientName = coloredName;
+  strcpy(clientName, coloredName);
+  printf("%s", clientName);
+  //return clientColoring[chosen];
+  //printf("\033%sHELLO\033%s\n", clientColoring[chosen], clientColoring[7]);
 }
 
 int booting(){
@@ -70,7 +83,6 @@ int booting(){
   fgets(decide, 256, stdin);
   decide[strlen(decide) - 1] = '\0';
   if(strstr(decide, "yes")){
-    colors();
     choosingColor();
     printf("GETS UP TO HERE\n");
   }
@@ -190,25 +202,21 @@ void channel(char * ip, char * portNum){
   // //printf("\033%sHELLO\033%s\n", clientColoring[chosen], clientColoring[7]);
 
 int main(int argc, char **argv){
-  colors();
-  char * testing = calloc(256, sizeof(char));
-  char * chosenColor = calloc(256, sizeof(char));
-  strcpy(chosenColor, coloring[1]); //RED
-  printf("WORKING");
-  char * changeText = calloc(256, sizeof(char));
-  strcpy(changeText, "\033[4");
-  strcat(changeText, chosenColor);
-
-  // printf("Enter your name: ");
-  // fgets(clientName, 256, stdin);
-  // clientName[strlen(clientName) - 1] = '\0';
+  // colors();
   // char * testing = calloc(256, sizeof(char));
-  // char * chosenColor = coloring[1]; //RED
+  // char * chosenColor = calloc(256, sizeof(char));
+  // strcpy(chosenColor, coloring[1]); //RED
   // printf("WORKING");
-  // chosenColor = strcat("\033[4", chosenColor);
+  // char * changeText = calloc(256, sizeof(char));
+  // strcpy(changeText, "\033[4");
+  // strcat(changeText, chosenColor);
+
+  printf("Enter your name: ");
+  fgets(clientName, 256, stdin);
+  clientName[strlen(clientName) - 1] = '\0';
 
 
-  printf("%shiya", changeText);
+  // printf("%shiya", changeText); //THIS IS PART OF THE BLOCK OF CODE ABOVE. FOR TESTING
   if(argc == 2){
     channel(argv[1], PORT);
   }
