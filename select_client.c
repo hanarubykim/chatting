@@ -3,37 +3,29 @@
 
 int check;
 char clientName[256];
-char * coloring[7] = {
-  ";31m", //RED
-  ";32m",
-  ";33m",
-  ";34m",
-  ";35m",
-  ";36m",
-  ";37m"
-};
+char * coloring[7];
 
 //FOR CLIENTS: [4
 //FOR TEXT: [1
 
 char * chosenClientColor;
 void colors(){
-  // char * red = ";31m";
-  // char * green = ";32m";
-  // char * yellow = ";33m";
-  // char * blue = ";34m";
-  // char * magenta = ";35m";
-  // char * cyan = ";36m";
-  // char * reset = ";37m";
-  //
-  // coloring[1] = red;
-  // coloring[2] = green;
-  //
-  // coloring[3] = yellow;
-  // coloring[4] = blue;
-  // coloring[5] = magenta;
-  // coloring[6] = cyan;
-  // coloring[7] = reset;
+  char * red = ";31m";
+  char * green = ";32m";
+  char * yellow = ";33m";
+  char * blue = ";34m";
+  char * magenta = ";35m";
+  char * cyan = ";36m";
+  char * reset = ";37m";
+
+  coloring[0] = red;
+  coloring[1] = green;
+  coloring[2] = yellow;
+  coloring[3] = blue;
+  coloring[4] = magenta;
+  coloring[5] = cyan;
+  coloring[6] = reset;
+
 }
 
 void choosingColor(){
@@ -198,10 +190,14 @@ void channel(char * ip, char * portNum){
   // //printf("\033%sHELLO\033%s\n", clientColoring[chosen], clientColoring[7]);
 
 int main(int argc, char **argv){
+  colors();
   char * testing = calloc(256, sizeof(char));
-  char * chosenColor = coloring[1]; //RED
+  char * chosenColor = calloc(256, sizeof(char));
+  strcpy(chosenColor, coloring[1]); //RED
   printf("WORKING");
-  chosenColor = strcat("\033[4", chosenColor);
+  char * changeText = calloc(256, sizeof(char));
+  strcpy(changeText, "\033[4");
+  strcat(changeText, chosenColor);
 
   // printf("Enter your name: ");
   // fgets(clientName, 256, stdin);
@@ -212,7 +208,7 @@ int main(int argc, char **argv){
   // chosenColor = strcat("\033[4", chosenColor);
 
 
-  printf("%shiya", chosenColor);
+  printf("%shiya", changeText);
   if(argc == 2){
     channel(argv[1], PORT);
   }
