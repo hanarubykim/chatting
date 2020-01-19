@@ -37,3 +37,15 @@ DEVLOG
 
 - 1/15: Christy (home)
   * Succeeded in printing welcome message, getting name, and printing messages
+
+- 1/16: Hana
+  * Added color options for the clients to choose from, stored it in an arrray
+
+- 1/17: Hana
+  * Trying to correct the output of each chatLine. Running into seg faults.
+
+- 1/18: Hana
+  * Fixed issues with the colored usernames.
+
+- 1/19: Hana
+  * Debugged issues with overwriting global variables, timestamps, and names. Chatroom now works (for a single user)
