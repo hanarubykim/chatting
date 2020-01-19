@@ -8,7 +8,6 @@ char * coloring[7];
 //FOR CLIENTS: [4, FOR TEXT: [1
 char * chosenClientColor;
 
-
 //*************************
 
 //helper function for choosingColor
@@ -28,7 +27,6 @@ void colors(){
   coloring[4] = magenta;
   coloring[5] = cyan;
   coloring[6] = reset;
-
 }
 
 void choosingColor(){
@@ -55,9 +53,12 @@ void choosingColor(){
   strcat(coloredName, "\033[;37m");
   strcpy(clientName, coloredName);
 
+  //NOT THE PROBLEM
+  //printf("HOW MANHY TIMES IS THIS CALLED????\n\n\n\n");
 }
 
 int booting(){
+  //NOT TH
   printf("\e[1;1H\e[2J");
   printf("****************************\n");
   printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
@@ -78,14 +79,37 @@ int booting(){
   else{
     printf("Alrighty then! That's fine too. :) \n");
   }
+
   return 1;
 }
 
-char * timeStamp(){
-  char * fullLine = calloc(256, sizeof(char));
-  char * tempNameIssue = calloc(256, sizeof(char));
-  tempNameIssue = clientName;
+// char * timeStamp(){
+//   char * fullLine = calloc(256, sizeof(char));
+//   char tempNameIssue[256] = "";
+//   strcpy(tempNameIssue, clientName);
+//   tempNameIssue[strlen(clientName)] ='\0';
+//
+//   printf("\n\n **CLIENT NAME: %s **\n\n", clientName);
+//   printf("TEMP NAME: %s", tempNameIssue);
+//   time_t now = time(NULL);
+//   char * timey = ctime(&now);
+//   timey[strcspn(timey, "\n")] = '\0';
+//
+//   char * paren1 = calloc(100, sizeof(char));
+//   strcpy(paren1, " (");
+//   char * paren2 = calloc(100, sizeof(char));
+//   strcpy(paren2, "): ");
+//
+//   timey = strcat(paren1, timey);
+//   timey = strcat(timey, paren2);
+//   fullLine = strcat(tempNameIssue, " ");
+//   fullLine = strcat(fullLine, timey);
+//
+//   //returns [name (time): ]
+//   return fullLine;
+// }
 
+char * timeStamp(){
   time_t now = time(NULL);
   char * timey = ctime(&now);
   timey[strcspn(timey, "\n")] = '\0';
@@ -93,15 +117,12 @@ char * timeStamp(){
   char * paren1 = calloc(100, sizeof(char));
   strcpy(paren1, " (");
   char * paren2 = calloc(100, sizeof(char));
-  strcpy(paren2, "): ");
+  strcpy(paren2, ")");
 
   timey = strcat(paren1, timey);
   timey = strcat(timey, paren2);
-  fullLine = strcat(tempNameIssue, " ");
-  fullLine = strcat(fullLine, timey);
 
-  //returns [name (time): ]
-  return fullLine;
+  return timey;
 }
 
 void channel(char * ip, char * p){
@@ -125,7 +146,15 @@ void channel(char * ip, char * p){
       select(server_socket + 1, &read_fds, NULL, NULL, NULL);
 
       if(FD_ISSET(STDIN_FILENO, &read_fds)){
-        char * beginning = timeStamp();
+        char * timing = timeStamp();
+        char fullLine[256];
+        strcpy(fullLine, clientName);
+        strcat(fullLine, " ");
+        strcat(fullLine, timing);
+        strcat(fullLine, ": ");
+        printf("%s", fullLine);
+
+        //printf("SEG FAULT HERE?");
         //printf("\e[1;1H\e[2J");
         //printf("**************************\n");
         //printf("WELCOME TO CHAT ROOM :)\n");
@@ -134,21 +163,22 @@ void channel(char * ip, char * p){
         //printf("\e[1;1H\e[2J");
 
         //****prints out ====>name (time):
-        printf("%s", beginning);
+        //printf("%s", beginning);
 
         char message[BUFFER_SIZE];
         fgets(message, sizeof(message), stdin);
         message[strlen(message) - 1] = '\0';
         //* strchr(message, '\n') = '\0';
 
-        beginning = timeStamp();
-        printf("CHECK THE STAMP: [%s]\n", beginning);
-
+        //printf("A\n");
+        char * updatedTime = timeStamp();
+        //printf("CHECK THE STAMP: [%s]\n", beginning);
+        //printf("B\n");
         char chatLine[BUFFER_SIZE];
-        strcpy(chatLine, beginning);
+        strcpy(chatLine, fullLine);
         strcat(chatLine, message);
-
-        printf("\nAT THIS POINT: %s", chatLine);
+        //printf("C\n");
+        //printf("\nAT THIS POINT: %s", chatLine);
         write(server_socket, chatLine, sizeof(chatLine));
         read(server_socket, message, sizeof(message));
       }
