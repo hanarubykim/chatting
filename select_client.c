@@ -5,10 +5,13 @@ int check;
 char clientName[256];
 char * coloring[7];
 
-//FOR CLIENTS: [4
-//FOR TEXT: [1
-
+//FOR CLIENTS: [4, FOR TEXT: [1
 char * chosenClientColor;
+
+
+//*************************
+
+//helper function for choosingColor
 void colors(){
   char * red = ";31m";
   char * green = ";32m";
@@ -42,7 +45,7 @@ void choosingColor(){
 
 
   chosenClientColor = calloc(256, sizeof(char));
-  strcpy(chosenClientColor, coloring[chosen]);
+  strcpy(chosenClientColor, coloring[chosen - 1]);
 
 
   char * coloredName = calloc(256, sizeof(char));
@@ -55,10 +58,6 @@ void choosingColor(){
 }
 
 int booting(){
-  // printf("\e[1;1H\e[2J");
-  // printf("Enter your name: ");
-  // fgets(clientName, 256, stdin);
-  // clientName[strlen(clientName) - 1] = '\0';
   printf("\e[1;1H\e[2J");
   printf("****************************\n");
   printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
@@ -70,6 +69,7 @@ int booting(){
   char decide[256];
   fgets(decide, 256, stdin);
   decide[strlen(decide) - 1] = '\0';
+
   if(strstr(decide, "yes")){
     choosingColor();
     //printf("GETS UP TO HERE\n");
@@ -78,32 +78,105 @@ int booting(){
   else{
     printf("Alrighty then! That's fine too. :) \n");
   }
-
   return 1;
 }
 
 char * timeStamp(){
   char * fullLine = calloc(256, sizeof(char));
-  char * adjusted = calloc(256, sizeof(char));
+  char * tempNameIssue = calloc(256, sizeof(char));
+  tempNameIssue = clientName;
 
-  time(NULL);
-  time_t now;
+  time_t now = time(NULL);
   char * timey = ctime(&now);
   timey[strcspn(timey, "\n")] = '\0';
-  strncpy(adjusted, timey, 19);
 
   char * paren1 = calloc(100, sizeof(char));
   strcpy(paren1, " (");
   char * paren2 = calloc(100, sizeof(char));
   strcpy(paren2, "): ");
-  timey = strcat(paren1, adjusted);
+
+  timey = strcat(paren1, timey);
   timey = strcat(timey, paren2);
-  char * space = " ";
-  fullLine = strcat(clientName, space);
+  fullLine = strcat(tempNameIssue, " ");
   fullLine = strcat(fullLine, timey);
 
+  //returns [name (time): ]
   return fullLine;
 }
+
+void channel(char * ip, char * p){
+  int server_socket;
+  //char message[BUFFER_SIZE];
+
+  fd_set read_fds;
+
+  server_socket = client_setup(ip, p);
+  printf("\e[1;1H\e[2J");
+  //check = 1;
+
+  while (1){
+    //printf("CALLS THIS FUNC\n"); // should print out everytime
+    if(check == 1){
+      //printf("AND IT REACHES HERE? OR NAH\n");
+      fflush(stdout);
+      FD_ZERO(&read_fds);
+      FD_SET(STDIN_FILENO, &read_fds);
+      FD_SET(server_socket, &read_fds);
+      select(server_socket + 1, &read_fds, NULL, NULL, NULL);
+
+      if(FD_ISSET(STDIN_FILENO, &read_fds)){
+        char * beginning = timeStamp();
+        //printf("\e[1;1H\e[2J");
+        //printf("**************************\n");
+        //printf("WELCOME TO CHAT ROOM :)\n");
+        // printf("**************************\n");
+        //printf("I THINK IT BREAKS RIGHT HERE??\n");
+        //printf("\e[1;1H\e[2J");
+
+        //****prints out ====>name (time):
+        printf("%s", beginning);
+
+        char message[BUFFER_SIZE];
+        fgets(message, sizeof(message), stdin);
+        message[strlen(message) - 1] = '\0';
+        //* strchr(message, '\n') = '\0';
+
+        beginning = timeStamp();
+        printf("CHECK THE STAMP: [%s]\n", beginning);
+
+        char chatLine[BUFFER_SIZE];
+        strcpy(chatLine, beginning);
+        strcat(chatLine, message);
+
+        printf("\nAT THIS POINT: %s", chatLine);
+        write(server_socket, chatLine, sizeof(chatLine));
+        read(server_socket, message, sizeof(message));
+      }
+    }else{
+      check = booting();
+    }
+  }
+}
+
+
+int main(int argc, char ** argv){
+  printf("\e[1;1H\e[2J");
+  printf("Setting up chatroom...\n");
+  printf("Enter your name: ");
+  fgets(clientName, 256, stdin);
+  clientName[strlen(clientName) - 1] = '\0';
+
+  if(argc == 2){
+    channel(argv[1], PORT);
+  }
+  else{
+    channel(TEST_IP, PORT);
+  }
+  return 0;
+}
+
+
+/* DUMP MAYBE USELESS CODE HERE:
 
 void printingLine(int server_socket, char * message){
   char * timey = timeStamp();
@@ -123,78 +196,7 @@ void printingLine(int server_socket, char * message){
   write(server_socket, message, sizeof(message));
   read(server_socket, message, sizeof(message));
 
-
-
-}
-
-void channel(char * ip, char * portNum){
-  int server_socket;
-  char message[BUFFER_SIZE];
-  int f;
-
-  fd_set read_fds;
-
-  server_socket = client_setup(ip, portNum);
-  printf("\e[1;1H\e[2J");
-  //check = 1;
-
-  while (1){
-    //printf("CALLS THIS FUNC\n"); // should print out everytime
-    if(check == 1){
-      //printf("AND IT REACHES HERE? OR NAH\n");
-      fflush(stdout);
-      FD_ZERO(&read_fds);
-      FD_SET(STDIN_FILENO, &read_fds);
-      FD_SET(server_socket, &read_fds);
-      select(server_socket + 1, &read_fds, NULL, NULL, NULL);
-
-      if(FD_ISSET(STDIN_FILENO, &read_fds)){
-
-        char * beginning = timeStamp();
-        // printf("\e[1;1H\e[2J");
-        // printf("**************************\n");
-        // printf("WELCOME TO CHAT ROOM :)\n");
-        // printf("**************************\n");
-        //printf("I THINK IT BREAKS RIGHT HERE??\n");
-        //printf("\e[1;1H\e[2J");
-
-        printf("\e[1;1H\e[2J");
-        printf("%s", beginning); // prints out name (time):
-        fgets(message, sizeof(message), stdin);
-        * strchr(message, '\n') = 0;
-
-        //char * timey = timeStamp();
-        beginning = timeStamp();
-
-        char chatLine[BUFFER_SIZE];
-        strcpy(chatLine, beginning);
-        strcat(chatLine, message);
-
-        write(server_socket, chatLine, sizeof(chatLine));
-        read(server_socket, message, sizeof(message));
-      }
-    }else{
-      check = booting();
-    }
-  }
 }
 
 
-int main(int argc, char ** argv){
-  printf("Enter your name: ");
-  fgets(clientName, 256, stdin);
-  clientName[strlen(clientName) - 1] = '\0';
-
-
-  // printf("%shiya", changeText); //THIS IS PART OF THE BLOCK OF CODE ABOVE. FOR TESTING
-  if(argc == 2){
-    channel(argv[1], PORT);
-  }
-  else{
-    channel(TEST_IP, PORT);
-  }
-
-  //int check = booting();
-
-  return 0;
-}
+*/
