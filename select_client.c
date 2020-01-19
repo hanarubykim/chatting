@@ -47,13 +47,9 @@ void choosingColor(){
 
   char * coloredName = calloc(256, sizeof(char));
   strcpy(coloredName, "\033[4");
-
   strcat(coloredName, chosenClientColor);
-
   strcat(coloredName, clientName);
-
-  strcat(coloredName, "\033[1");
-
+  strcat(coloredName, "\033[;37m");
   strcpy(clientName, coloredName);
 
 }
@@ -64,9 +60,9 @@ int booting(){
   // fgets(clientName, 256, stdin);
   // clientName[strlen(clientName) - 1] = '\0';
   printf("\e[1;1H\e[2J");
-  printf("**************************\n");
+  printf("****************************\n");
   printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
-  printf("**************************\n");
+  printf("****************************\n");
   // printf("Welcome, [%s]\n", clientName);
   // printf("You can now enter messages!\n");
 
@@ -76,8 +72,8 @@ int booting(){
   decide[strlen(decide) - 1] = '\0';
   if(strstr(decide, "yes")){
     choosingColor();
-    printf("GETS UP TO HERE\n");
-    printf("HIIIII%s", clientName); //for testing purposes
+    //printf("GETS UP TO HERE\n");
+    //printf("%s", clientName); //for testing purposes
   }
   else{
     printf("Alrighty then! That's fine too. :) \n");
@@ -86,18 +82,21 @@ int booting(){
   return 1;
 }
 
-
 char * timeStamp(){
   char * fullLine = calloc(256, sizeof(char));
+  char * adjusted = calloc(256, sizeof(char));
+
   time(NULL);
   time_t now;
   char * timey = ctime(&now);
   timey[strcspn(timey, "\n")] = '\0';
+  strncpy(adjusted, timey, 19);
+
   char * paren1 = calloc(100, sizeof(char));
   strcpy(paren1, " (");
   char * paren2 = calloc(100, sizeof(char));
   strcpy(paren2, "): ");
-  timey = strcat(paren1, timey);
+  timey = strcat(paren1, adjusted);
   timey = strcat(timey, paren2);
   char * space = " ";
   fullLine = strcat(clientName, space);
@@ -136,65 +135,52 @@ void channel(char * ip, char * portNum){
   fd_set read_fds;
 
   server_socket = client_setup(ip, portNum);
-
+  printf("\e[1;1H\e[2J");
   //check = 1;
 
-
   while (1){
+    //printf("CALLS THIS FUNC\n"); // should print out everytime
     if(check == 1){
+      //printf("AND IT REACHES HERE? OR NAH\n");
       fflush(stdout);
       FD_ZERO(&read_fds);
       FD_SET(STDIN_FILENO, &read_fds);
       FD_SET(server_socket, &read_fds);
-
-      //select will block until either fd is ready
       select(server_socket + 1, &read_fds, NULL, NULL, NULL);
 
-      if (FD_ISSET(STDIN_FILENO, &read_fds)) {
+      if(FD_ISSET(STDIN_FILENO, &read_fds)){
+
+        char * beginning = timeStamp();
+        // printf("\e[1;1H\e[2J");
+        // printf("**************************\n");
+        // printf("WELCOME TO CHAT ROOM :)\n");
+        // printf("**************************\n");
+        //printf("I THINK IT BREAKS RIGHT HERE??\n");
+        //printf("\e[1;1H\e[2J");
+
         printf("\e[1;1H\e[2J");
-        printf("**************************\n");
-        printf("WELCOME TO CHAT ROOM :)\n");
-        printf("**************************\n");
-        char message[BUFFER_SIZE];
+        printf("%s", beginning); // prints out name (time):
         fgets(message, sizeof(message), stdin);
-        *strchr(message, '\n') = 0;
+        * strchr(message, '\n') = 0;
 
-        //printf("%s: ", username);
-        // if(strstr(buffer, "#in")){
-        //   char temp[BU        printf("%s: ", username);FFER_SIZE];
-        //   temp = buffer;
-        // }
+        //char * timey = timeStamp();
+        beginning = timeStamp();
 
-        // char * timey = timeStamp();
-        // char * chatLine = calloc(256, sizeof(char));
-        // chatLine = strcat(clientName, timey);
-        // chatLine = strcat(chatLine, message);
-        // chatLine = strcat(chatLine, "\n");
+        char chatLine[BUFFER_SIZE];
+        strcpy(chatLine, beginning);
+        strcat(chatLine, message);
 
-        printingLine(server_socket, message);
-        //TEST OUT WHAT WRITE VS WHAT READ DOES TOMORROW
-        // write(server_socket, message, sizeof(message));
-        // read(server_socket, message, sizeof(message));
-
+        write(server_socket, chatLine, sizeof(chatLine));
+        read(server_socket, message, sizeof(message));
       }
-    } else{
+    }else{
       check = booting();
     }
   }
-
 }
 
 
-int main(int argc, char **argv){
-  // colors();
-  // char * testing = calloc(256, sizeof(char));
-  // char * chosenColor = calloc(256, sizeof(char));
-  // strcpy(chosenColor, coloring[1]); //RED
-  // printf("WORKING");
-  // char * changeText = calloc(256, sizeof(char));
-  // strcpy(changeText, "\033[4");
-  // strcat(changeText, chosenColor);
-
+int main(int argc, char ** argv){
   printf("Enter your name: ");
   fgets(clientName, 256, stdin);
   clientName[strlen(clientName) - 1] = '\0';
