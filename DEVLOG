@@ -55,3 +55,7 @@ DEVLOG
 
 - 1/19: Hana
   * Debugged issues with overwriting global variables, timestamps, and names. Chatroom now works (for a single user)
+
+- 1/19: Christy
+  * Creating chatrooms works. Also able to join chatrooms, but can't display messages properly
+  
