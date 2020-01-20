@@ -77,7 +77,7 @@ void channel(char * portNum){
         client_socket = server_connect(listen_socket);
 
         //for testing client select statement
-        strncpy(buffer, "DOES THIS OUTPUT ANYTHING?!\n", sizeof(buffer));
+        // strncpy(buffer, "DOES THIS OUTPUT ANYTHING?!\n", sizeof(buffer));
         write(client_socket, buffer, sizeof(buffer));
 
 
@@ -102,9 +102,12 @@ void channel(char * portNum){
             if(strstr(buffer, "*CREATE ")){
               char ** parsed = parse_args(buffer, " ");
               char * newPort = parsed[8];
-              strcat(buffer, newPort);
+              // strcat(buffer, newPort);
               f = fork();
               if(f == 0){
+                //THIS CAT DOES NOT WORK ****************
+                // strcat(buffer, "CREATED PORT");
+                // strcat(buffer, newPort);
                 channel(newPort);
               }
             }
