@@ -60,9 +60,9 @@ void choosingColor(){
 int booting(){
   //NOT TH
   printf("\e[1;1H\e[2J");
-  printf("****************************\n");
+  printf("***************************************\n");
   printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
-  printf("****************************\n");
+  printf("***************************************\n");
   // printf("Welcome, [%s]\n", clientName);
   // printf("You can now enter messages!\n");
 
@@ -73,8 +73,6 @@ int booting(){
 
   if(strstr(decide, "yes")){
     choosingColor();
-    //printf("GETS UP TO HERE\n");
-    //printf("%s", clientName); //for testing purposes
   }
   else{
     printf("Alrighty then! That's fine too. :) \n");
@@ -82,32 +80,6 @@ int booting(){
 
   return 1;
 }
-
-// char * timeStamp(){
-//   char * fullLine = calloc(256, sizeof(char));
-//   char tempNameIssue[256] = "";
-//   strcpy(tempNameIssue, clientName);
-//   tempNameIssue[strlen(clientName)] ='\0';
-//
-//   printf("\n\n **CLIENT NAME: %s **\n\n", clientName);
-//   printf("TEMP NAME: %s", tempNameIssue);
-//   time_t now = time(NULL);
-//   char * timey = ctime(&now);
-//   timey[strcspn(timey, "\n")] = '\0';
-//
-//   char * paren1 = calloc(100, sizeof(char));
-//   strcpy(paren1, " (");
-//   char * paren2 = calloc(100, sizeof(char));
-//   strcpy(paren2, "): ");
-//
-//   timey = strcat(paren1, timey);
-//   timey = strcat(timey, paren2);
-//   fullLine = strcat(tempNameIssue, " ");
-//   fullLine = strcat(fullLine, timey);
-//
-//   //returns [name (time): ]
-//   return fullLine;
-// }
 
 char * timeStamp(){
   time_t now = time(NULL);
@@ -126,14 +98,13 @@ char * timeStamp(){
 }
 
 void channel(char * ip, char * p){
+  int f;
   int server_socket;
-  //char message[BUFFER_SIZE];
-
   fd_set read_fds;
 
   server_socket = client_setup(ip, p);
+
   printf("\e[1;1H\e[2J");
-  //check = 1;
 
   while (1){
     //printf("CALLS THIS FUNC\n"); // should print out everytime
@@ -170,6 +141,20 @@ void channel(char * ip, char * p){
         message[strlen(message) - 1] = '\0';
         //* strchr(message, '\n') = '\0';
 
+        if(strstr(message, "*JOIN")){
+          //char temp[BUFFER_SIZE];
+          char * temp = calloc(256, sizeof(char));
+
+          strcpy(temp, message);
+          strsep(&temp, " ");
+          f = fork();
+          if(f != 0){
+            channel(ip, p);
+          }
+          else{
+            exit(0);
+          }
+        }
         //printf("A\n");
         char * updatedTime = timeStamp();
         //printf("CHECK THE STAMP: [%s]\n", beginning);
@@ -191,7 +176,9 @@ void channel(char * ip, char * p){
 
 int main(int argc, char ** argv){
   printf("\e[1;1H\e[2J");
+  printf("************************\n");
   printf("Setting up chatroom...\n");
+  printf("************************\n");
   printf("Enter your name: ");
   fgets(clientName, 256, stdin);
   clientName[strlen(clientName) - 1] = '\0';
