@@ -10,6 +10,19 @@ char * chosenClientColor;
 
 //*************************
 
+
+char ** parse_args(char * line, char * split) {
+    line = strsep(&line, "\n");
+    char ** args = malloc(sizeof(char *) * 10);
+    int x = 0;
+    while (line) {
+        args[x] = strsep( &line, split);
+        x += 1;
+    }
+    args[x] = NULL;
+    return args;
+}
+
 //helper function for choosingColor
 void colors(){
   char * red = ";31m";
@@ -142,14 +155,24 @@ void channel(char * ip, char * p){
         //* strchr(message, '\n') = '\0';
 
         if(strstr(message, "*JOIN")){
-          //char temp[BUFFER_SIZE];
-          char * temp = calloc(256, sizeof(char));
+          // //char temp[BUFFER_SIZE];
+          // char * temp = calloc(256, sizeof(char));
+          //
+          // strcpy(temp, message);
+          // strsep(&temp, " ");
+          // f = fork();
+          // if(f != 0){
+          //   channel(ip, p);
+          // }
+          // else{
+          //   exit(0);
+          // }
 
-          strcpy(temp, message);
-          strsep(&temp, " ");
+          char ** parsed = parse_args(message, " ");
+          char * newPort = parsed[8];
           f = fork();
           if(f != 0){
-            channel(ip, p);
+            channel(ip, newPort);
           }
           else{
             exit(0);
