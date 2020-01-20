@@ -58,4 +58,6 @@ DEVLOG
 
 - 1/19: Christy
   * Creating chatrooms works. Also able to join chatrooms, but can't display messages properly
-  
+
+- 1/20: Christy
+  * Talking between clients works! And joining chatrooms works! There are just tiny annoyances when printing out the messages
