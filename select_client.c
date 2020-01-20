@@ -4,6 +4,9 @@
 int check;
 char clientName[256];
 char * coloring[7];
+char chatLine[BUFFER_SIZE];
+char message[BUFFER_SIZE];
+char fullLine[256];
 
 //FOR CLIENTS: [4, FOR TEXT: [1
 char * chosenClientColor;
@@ -131,7 +134,7 @@ void channel(char * ip, char * p){
 
       if(FD_ISSET(STDIN_FILENO, &read_fds)){
         char * timing = timeStamp();
-        char fullLine[256];
+        // char fullLine[256]; //***************************
         strcpy(fullLine, clientName);
         strcat(fullLine, " ");
         strcat(fullLine, timing);
@@ -183,20 +186,35 @@ void channel(char * ip, char * p){
         char * updatedTime = timeStamp();
         //printf("CHECK THE STAMP: [%s]\n", beginning);
         //printf("B\n");
-        char chatLine[BUFFER_SIZE];
+        // char chatLine[BUFFER_SIZE]; //***********************************
         strcpy(chatLine, fullLine);
         strcat(chatLine, message);
+
         //printf("C\n");
         //printf("\nAT THIS POINT: %s", chatLine);
         write(server_socket, chatLine, sizeof(chatLine));
         read(server_socket, message, sizeof(message));
+
       }
     }else{
       check = booting();
     }
+
+    //currently the server is not set up to
+    //send messages to all the clients, but
+    //this would allow for broadcast messages
+    if (FD_ISSET(server_socket, &read_fds)) {
+      read(server_socket, message, sizeof(message));
+      printf("\r%s\n%s", message, fullLine);
+      // printf("[SERVER BROADCAST] [%s]\n", buffer);
+      // printf("enter data: ");
+      //the above printf does not have \n
+      //flush the buffer to immediately print
+      fflush(stdout);
+    }//end socket select
+
   }
 }
-
 
 int main(int argc, char ** argv){
   printf("\e[1;1H\e[2J");
