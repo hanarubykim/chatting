@@ -169,7 +169,8 @@ void channel(char * ip, char * p){
           // }
 
           char ** parsed = parse_args(message, " ");
-          char * newPort = parsed[8];
+          char * newPort = parsed[1];
+          printf("%s", newPort);
           f = fork();
           if(f != 0){
             channel(ip, newPort);

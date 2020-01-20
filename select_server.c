@@ -24,17 +24,8 @@ char ** parse_args(char * line, char * split) {
     return args;
 }
 
-//to avoid "address already in use"
-static void handleSigs(int sigN) {
-  if (sigN == SIGINT) {
-    char ** myargs = parse_args("killall -9 server", " ");
-    execvp(myargs[0], myargs);
-  }
-}
-
 
 void channel(char * portNum){
-  signal(SIGINT, handleSigs);
 
   int listen_socket;
   int client_socket;
@@ -109,7 +100,6 @@ void channel(char * portNum){
 
             //create a chatroom
             if(strstr(buffer, "*CREATE ")){
-              printf("%s", buffer);
               char ** parsed = parse_args(buffer, " ");
               char * newPort = parsed[8];
               strcat(buffer, newPort);
