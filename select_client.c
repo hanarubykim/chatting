@@ -11,8 +11,6 @@ char fullLine[256];
 //FOR CLIENTS: [4, FOR TEXT: [1
 char * chosenClientColor;
 
-
-
 char ** parse_args(char * line, char * split) {
     line = strsep(&line, "\n");
     char ** args = malloc(sizeof(char *) * 10);
@@ -44,7 +42,7 @@ void colors(){
   coloring[6] = reset;
 }
 
-void choosingColor(){
+int choosingColor(){
   colors(); //sets up the array of colors
   printf("CHOOSING USERNAME COLOR... HERE ARE YOUR OPTIONS\n");
   printf("(1) RED\n(2) GREEN\n(3) YELLOW\n(4) BLUE\n(5) MAGENTA\n(6) CYAN\n(7) WHITE\n\n");
@@ -56,10 +54,8 @@ void choosingColor(){
 
   int chosen = atoi(colorNum);
 
-
   chosenClientColor = calloc(256, sizeof(char));
   strcpy(chosenClientColor, coloring[chosen - 1]);
-
 
   char * coloredName = calloc(256, sizeof(char));
   strcpy(coloredName, "\033[4");
@@ -68,6 +64,12 @@ void choosingColor(){
   strcat(coloredName, "\033[;37m");
   strcpy(clientName, coloredName);
 
+  sleep(1);
+  printf("\e[1;1H\e[2J");
+  printf("***************************************\n");
+  printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
+  printf("***************************************\n");
+  return 1;
 }
 
 int booting(){
@@ -125,22 +127,20 @@ void channel(char * ip, char * p){
       FD_SET(server_socket, &read_fds);
       select(server_socket + 1, &read_fds, NULL, NULL, NULL);
 
+      char * timing = timeStamp();
+
       if(FD_ISSET(STDIN_FILENO, &read_fds)){
-        char * timing = timeStamp();
         strcpy(fullLine, clientName);
         strcat(fullLine, " ");
         strcat(fullLine, timing);
         strcat(fullLine, ": ");
         printf("%s", fullLine);
 
-
         char message[BUFFER_SIZE];
         fgets(message, sizeof(message), stdin);
         message[strlen(message) - 1] = '\0';
-        //* strchr(message, '\n') = '\0';
 
         if(strstr(message, "*JOIN")){
-
           char ** parsed = parse_args(message, " ");
           char * newPort = parsed[1];
           printf("%s", newPort);
@@ -152,6 +152,7 @@ void channel(char * ip, char * p){
             exit(0);
           }
         }
+
         char * updatedTime = timeStamp();
         strcpy(chatLine, fullLine);
         strcat(chatLine, message);
@@ -164,8 +165,6 @@ void channel(char * ip, char * p){
       check = booting();
     }
 
-    //this would allow for broadcast messages
-    //between clients
     if (FD_ISSET(server_socket, &read_fds)) {
       read(server_socket, message, sizeof(message));
       printf("\r%s\n%s", message, fullLine);
