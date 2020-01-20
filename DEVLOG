@@ -39,13 +39,25 @@ DEVLOG
   * Succeeded in printing welcome message, getting name, and printing messages
 
 - 1/16: Hana
-  * Added color options for the clients to choose from, stored it in an arrray
+  * Added color options for the clients to choose from, stored it in an array
+
+- 1/17: Hana and Christy (during class)
+  * Trying to debug colored usernames
 
 - 1/17: Hana
   * Trying to correct the output of each chatLine. Running into seg faults.
+
+- 1/18: Christy
+  * Progress on colored names. Still running into abort trap.
 
 - 1/18: Hana
   * Fixed issues with the colored usernames.
 
 - 1/19: Hana
   * Debugged issues with overwriting global variables, timestamps, and names. Chatroom now works (for a single user)
+
+- 1/19: Christy
+  * Creating chatrooms works. Also able to join chatrooms, but can't display messages properly
+
+- 1/20: Christy
+  * Talking between clients works! And joining chatrooms works! There are just tiny annoyances when printing out the messages

@@ -2,6 +2,7 @@
 
 int f; //fork pid
 
+char ** parse_args(char * line, char * split);
 void process(char *s);
 void subserver(int from_client);
 void channel(char * portNum);
@@ -10,34 +11,24 @@ int main(){
   channel(PORT);
 }
 
-// //simple parsing, helper for handleSigs function
-//DONT NEED handleSigs function
-// char ** parse_args(char * line, char * split) {
-//     line = strsep(&line, "\n");
-//     char ** args = malloc(sizeof(char *) * 10);
-//     int x = 0;
-//     while (line) {
-//         args[x] = strsep( &line, split);
-//         x += 1;
-//     }
-//     args[x] = NULL;
-//     return args;
-// }
+//simple parsing
+char ** parse_args(char * line, char * split) {
+    line = strsep(&line, "\n");
+    char ** args = malloc(sizeof(char *) * 10);
+    int x = 0;
+    while (line) {
+        args[x] = strsep( &line, split);
+        x += 1;
+    }
+    args[x] = NULL;
+    return args;
+}
 
-// //to avoid "address already in use"
-// static void handleSigs(int sigN) {
-//   if (sigN == SIGINT) {
-//     char ** myargs = parse_args("kill ", " ");
-//     execvp(myargs[0], myargs);
-//   }
-// }
 
 void channel(char * portNum){
-  // signal(SIGINT, handleSigs);
 
   int listen_socket;
   int client_socket;
-  //   int f;
   int subserver_count = 0;
   char buffer[BUFFER_SIZE];
 
@@ -86,7 +77,7 @@ void channel(char * portNum){
         client_socket = server_connect(listen_socket);
 
         //for testing client select statement
-        strncpy(buffer, "DOES THIS OUTPUT ANYTHING?!\n", sizeof(buffer));
+        // strncpy(buffer, "DOES THIS OUTPUT ANYTHING?!\n", sizeof(buffer));
         write(client_socket, buffer, sizeof(buffer));
 
 
@@ -104,33 +95,37 @@ void channel(char * portNum){
       for (i = 0; i < max_clients; i++) {
         //if listen_socket triggered select
         if (FD_ISSET(clientsConnected[i], &read_fds)) {
-          //need to create ability to ...
-          //create a chatroom
-          //join a different chatroom
           if (read(clientsConnected[i], buffer, sizeof(buffer))) {
-            //read in the line that could contain the prompt to create/change chatrooms
+            //read in the line that could contain the prompt to create/join chatrooms
 
             //create a chatroom
-            if(strstr(buffer, "!CREATE ")){
-              char * newPort; //need to parse the line to find the new chatroom name
-              strcat(buffer, newPort);
+            if(strstr(buffer, "*CREATE ")){
+              char ** parsed = parse_args(buffer, " ");
+              char * newPort = parsed[8];
+              // strcat(buffer, newPort);
               f = fork();
               if(f == 0){
+                //THIS CAT DOES NOT WORK ****************
+                // strcat(buffer, "CREATED PORT");
+                // strcat(buffer, newPort);
                 channel(newPort);
               }
             }
 
           //join a different chatroom
-          if (strstr(buffer, "!JOIN ") ){
+          if (strstr(buffer, "*JOIN ") ){
               close(clientsConnected[i]);
               clientsConnected[i] = 0;
               // Send to all clients
               for (i = 0; i < max_clients; i++) {
                   if (clientsConnected[i] > 0) {
-                      write(clientsConnected[i], buffer, sizeof(buffer));
+                    write(clientsConnected[i], buffer, sizeof(buffer));
                   }
               }
           }
+
+          printf("[subserver %d] received: [%s]\n", getpid(), buffer);
+
           for (i = 0; i < max_clients; i++) {
               if (clientsConnected[i] > 0) {
                   write(clientsConnected[i], buffer, sizeof(buffer));
@@ -143,6 +138,8 @@ void channel(char * portNum){
         }
       }
     }
+
+    //if stdin triggered select
     if (FD_ISSET(STDIN_FILENO, &read_fds)) {
       //if you don't read from stdin, it will continue to trigger select()
       fgets(buffer, sizeof(buffer), stdin);

@@ -4,11 +4,26 @@
 int check;
 char clientName[256];
 char * coloring[7];
+char chatLine[BUFFER_SIZE];
+char message[BUFFER_SIZE];
+char fullLine[256];
 
 //FOR CLIENTS: [4, FOR TEXT: [1
 char * chosenClientColor;
 
-//*************************
+
+
+char ** parse_args(char * line, char * split) {
+    line = strsep(&line, "\n");
+    char ** args = malloc(sizeof(char *) * 10);
+    int x = 0;
+    while (line) {
+        args[x] = strsep( &line, split);
+        x += 1;
+    }
+    args[x] = NULL;
+    return args;
+}
 
 //helper function for choosingColor
 void colors(){
@@ -53,8 +68,6 @@ void choosingColor(){
   strcat(coloredName, "\033[;37m");
   strcpy(clientName, coloredName);
 
-  //NOT THE PROBLEM
-  //printf("HOW MANHY TIMES IS THIS CALLED????\n\n\n\n");
 }
 
 int booting(){
@@ -63,8 +76,6 @@ int booting(){
   printf("***************************************\n");
   printf("WELCOME TO CHAT ROOM, [%s]\n", clientName);
   printf("***************************************\n");
-  // printf("Welcome, [%s]\n", clientName);
-  // printf("You can now enter messages!\n");
 
   printf("WOULD YOU LIKE TO CHOOSE A COLOR FOR YOUR USERNAME? [yes] or [no]\n");
   char decide[256];
@@ -107,9 +118,7 @@ void channel(char * ip, char * p){
   printf("\e[1;1H\e[2J");
 
   while (1){
-    //printf("CALLS THIS FUNC\n"); // should print out everytime
     if(check == 1){
-      //printf("AND IT REACHES HERE? OR NAH\n");
       fflush(stdout);
       FD_ZERO(&read_fds);
       FD_SET(STDIN_FILENO, &read_fds);
@@ -118,23 +127,12 @@ void channel(char * ip, char * p){
 
       if(FD_ISSET(STDIN_FILENO, &read_fds)){
         char * timing = timeStamp();
-        char fullLine[256];
         strcpy(fullLine, clientName);
         strcat(fullLine, " ");
         strcat(fullLine, timing);
         strcat(fullLine, ": ");
         printf("%s", fullLine);
 
-        //printf("SEG FAULT HERE?");
-        //printf("\e[1;1H\e[2J");
-        //printf("**************************\n");
-        //printf("WELCOME TO CHAT ROOM :)\n");
-        // printf("**************************\n");
-        //printf("I THINK IT BREAKS RIGHT HERE??\n");
-        //printf("\e[1;1H\e[2J");
-
-        //****prints out ====>name (time):
-        //printf("%s", beginning);
 
         char message[BUFFER_SIZE];
         fgets(message, sizeof(message), stdin);
@@ -142,37 +140,40 @@ void channel(char * ip, char * p){
         //* strchr(message, '\n') = '\0';
 
         if(strstr(message, "*JOIN")){
-          //char temp[BUFFER_SIZE];
-          char * temp = calloc(256, sizeof(char));
 
-          strcpy(temp, message);
-          strsep(&temp, " ");
+          char ** parsed = parse_args(message, " ");
+          char * newPort = parsed[1];
+          printf("%s", newPort);
           f = fork();
           if(f != 0){
-            channel(ip, p);
+            channel(ip, newPort);
           }
           else{
             exit(0);
           }
         }
-        //printf("A\n");
         char * updatedTime = timeStamp();
-        //printf("CHECK THE STAMP: [%s]\n", beginning);
-        //printf("B\n");
-        char chatLine[BUFFER_SIZE];
         strcpy(chatLine, fullLine);
         strcat(chatLine, message);
-        //printf("C\n");
-        //printf("\nAT THIS POINT: %s", chatLine);
+
         write(server_socket, chatLine, sizeof(chatLine));
         read(server_socket, message, sizeof(message));
+
       }
     }else{
       check = booting();
     }
+
+    //this would allow for broadcast messages
+    //between clients
+    if (FD_ISSET(server_socket, &read_fds)) {
+      read(server_socket, message, sizeof(message));
+      printf("\r%s\n%s", message, fullLine);
+      fflush(stdout);
+    }//end socket select
+
   }
 }
-
 
 int main(int argc, char ** argv){
   printf("\e[1;1H\e[2J");
@@ -191,29 +192,3 @@ int main(int argc, char ** argv){
   }
   return 0;
 }
-
-
-/* DUMP MAYBE USELESS CODE HERE:
-
-void printingLine(int server_socket, char * message){
-  char * timey = timeStamp();
-  char * chatLine = calloc(256, sizeof(char));
-
-  //THIS IS DONE BY CHRISTY.
-  // strcpy(chatLine, clientName);//name
-  // strcat(chatLine, timey);//followed by time
-  // strcat(chatLine, message);// followed by message
-  // strcat(chatLine, "\n");
-
-  //THIS WAS DONE BY HANA
-  chatLine = strcat(clientName, timey);
-  chatLine = strcat(chatLine, message);
-  chatLine = strcat(chatLine, "\n");
-
-  write(server_socket, message, sizeof(message));
-  read(server_socket, message, sizeof(message));
-
-}
-
-
-*/
