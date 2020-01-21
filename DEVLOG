@@ -61,6 +61,8 @@ DEVLOG
 
 - 1/20: Christy
   * Talking between clients works! And joining chatrooms works! There are just tiny annoyances when printing out the messages
+  * Updated README and moved proposal to new file
+<<<<<<< HEAD
 
 - 1/20: Hana
   * Went through program to note any bugs, updated README. Got rid of unnecessary files and testing comments.
